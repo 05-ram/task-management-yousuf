@@ -1,4 +1,4 @@
-const { createAsyncThunk } = require("@reduxjs/toolkit")
+const { createAsyncThunk, createSlice } = require("@reduxjs/toolkit")
 
 const initialState = {
     task: [],
@@ -20,3 +20,26 @@ const fetchToDo = createAsyncThunk('task/fetchToDo', async () => {
     ))
 })
 
+const taskSlice = createSlice({
+    name: 'task',
+    initialState,
+    reducers: {
+
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchToDo.pending, (state) => {
+            state.error = null
+            state.loading = true
+        }),
+            builder.addCase(fetchToDo.fulfilled, (state, action) => {
+                state.task = action.payload;
+                state.error = false;
+            }),
+            builder.addCase(fetchToDo.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+    }
+})
+
+export default taskSlice.reducer;
