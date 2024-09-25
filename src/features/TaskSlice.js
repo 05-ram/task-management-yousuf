@@ -1,4 +1,4 @@
-const { createAsyncThunk, createSlice } = require("@reduxjs/toolkit")
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     task: [],
@@ -7,9 +7,9 @@ const initialState = {
     status: 'All'
 }
 
-const fetchToDo = createAsyncThunk('task/fetchToDo', async () => {
+export const fetchToDo = createAsyncThunk('task/fetchToDo', async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
-    const data = response.json();
+    const data = await response.json();
     return data.map(task => (
         {
             id: task.id,
@@ -30,15 +30,13 @@ const taskSlice = createSlice({
         builder.addCase(fetchToDo.pending, (state) => {
             state.error = null
             state.loading = true
-        }),
-            builder.addCase(fetchToDo.fulfilled, (state, action) => {
-                state.task = action.payload;
-                state.error = false;
-            }),
-            builder.addCase(fetchToDo.rejected, (state, action) => {
-                state.loading = false
-                state.error = action.error.message
-            })
+        }).addCase(fetchToDo.fulfilled, (state, action) => {
+            state.task = action.payload;
+            state.error = false;
+        }).addCase(fetchToDo.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.error.message
+        })
     }
 })
 
