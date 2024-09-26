@@ -24,7 +24,9 @@ const taskSlice = createSlice({
     name: 'task',
     initialState,
     reducers: {
-
+        addTask: (state, action) => {
+            state.task.push(action.payload)
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchToDo.pending, (state) => {
@@ -39,5 +41,5 @@ const taskSlice = createSlice({
         })
     }
 })
-
+export const { addTask } = taskSlice.actions;
 export default taskSlice.reducer;

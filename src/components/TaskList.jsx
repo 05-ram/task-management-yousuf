@@ -20,13 +20,14 @@ const TaskList = () => {
     }
     return (
         <div className='task-list'>
-            <h2>
-                Tasks
-            </h2>
+
+            <h4 className='mb-3 mt-4'>
+                Tasks List
+            </h4>
             <ul>
                 {
-                    tasks.map(task => (
-                        <li className='d-flex justify-content-between mb-3 align-items-center list-item'>
+                    tasks.map((task, index) => (
+                        <li className='d-flex justify-content-between mb-3 align-items-center list-item' key={index}>
                             <div>
                                 <p className='mb-0'><span className='title'>{task.title}</span></p>
                                 {task.description && <p>{task.description}</p>}
@@ -45,5 +46,3 @@ const TaskList = () => {
 }
 
 export default TaskList
-
-//18.50
