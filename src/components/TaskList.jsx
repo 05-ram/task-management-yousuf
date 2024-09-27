@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchToDo } from '../features/TaskSlice';
+import { deleteTask, fetchToDo } from '../features/TaskSlice';
+import EditTask from './EditTask';
 
 const TaskList = () => {
     const tasks = useSelector((state) => state.task.task);
     const loading = useSelector((state) => state.task.loading);
     const err = useSelector((state) => state.task.error);
+    const [isShow, setIsShow] = useState(false);
+    const [currentTask, setCurrentTask] = useState(null)
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -17,6 +20,19 @@ const TaskList = () => {
     }
     if (err) {
         <p>There is an Error {err}</p>
+    }
+
+    const handleEdit = (task) => {
+        setIsShow(true);
+        setCurrentTask(task)
+    }
+
+    const handleClose = () => {
+        setIsShow(false);
+        setCurrentTask(null)
+    }
+    const handleDelete = (id) => {
+        dispatch(deleteTask(id))
     }
     return (
         <div className='task-list'>
@@ -34,13 +50,22 @@ const TaskList = () => {
                                 <p className='mb-0'><span className='title'> Status :</span> <i> {task.status}</i></p>
                             </div>
                             <div className='d-flex gap-2'>
-                                <Button>Edit</Button>
-                                <Button variant='danger'>Delete</Button>
+                                <Button onClick={() => handleEdit(task)}>Edit</Button>
+                                <Button variant='danger' onClick={() => handleDelete(task.id)}>Delete</Button>
                             </div>
                         </li>
                     ))
                 }
             </ul>
+            {
+                currentTask && (
+                    <EditTask
+                        show={isShow}
+                        handleClose={handleClose}
+                        task={currentTask}
+                    />
+                )
+            }
         </div>
     )
 }

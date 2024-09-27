@@ -26,6 +26,14 @@ const taskSlice = createSlice({
     reducers: {
         addTask: (state, action) => {
             state.task.push(action.payload)
+        },
+        editTask: (state, action) => {
+            state.task = state.task.map(task => (
+                task.id === action.payload.id ? action.payload : task
+            ))
+        },
+        deleteTask: (state, action) => {
+            state.task = state.task.filter(task => task.id !== action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -41,5 +49,5 @@ const taskSlice = createSlice({
         })
     }
 })
-export const { addTask } = taskSlice.actions;
+export const { addTask, editTask, deleteTask } = taskSlice.actions;
 export default taskSlice.reducer;
